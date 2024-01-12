@@ -29,6 +29,15 @@ class Snake:
         self.head.y += self.ydir * BLOCK_SIZE
         self.body.remove(self.head)
 
+class Apple:
+    def __init__(self):
+        self.x = int(random.randint(0, SW)/BLOCK_SIZE) *BLOCK_SIZE
+        self.y = int(random.randint(0, SH)/BLOCK_SIZE) *BLOCK_SIZE
+        self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
+
+    def update(self):
+        pygame.draw.rect(screen, "red", self.rect)
+
 def drawGrid():
     for x in range (0,SW,BLOCK_SIZE):
         for y in range (0,SH,BLOCK_SIZE):
@@ -38,6 +47,8 @@ def drawGrid():
 drawGrid()
 
 snake = Snake()
+
+apple = Apple()
 
 while True:
     for event in pygame.event.get():
@@ -63,10 +74,16 @@ while True:
     screen.fill("black")
     drawGrid()
     
+    apple.update()
+
     pygame.draw.rect(screen,"green", snake.head)
 
     for square in snake.body:
         pygame.draw.rect(screen, "green" , square)
+
+    if snake.head.x == apple.x and snake.head.y == apple.y:
+        snake.body.append(pygame.Rect(snake.head.x, snake.head.y, BLOCK_SIZE, BLOCK_SIZE))
+        apple = Apple()
 
     pygame.display.update()
     clock.tick(10)
