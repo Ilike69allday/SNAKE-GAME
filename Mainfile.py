@@ -4,11 +4,11 @@ import random
 
 pygame.init()
 
-SW, SH = 800,800
-BLOCK_SIZE = 50 
+SW, SH = 750,750
+BLOCK_SIZE = 25 
 FONT = pygame.font.Font("font.ttf",BLOCK_SIZE*2)
 
-screen = pygame.display.set_mode ((800,800))
+screen = pygame.display.set_mode ((SW,SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0
@@ -64,7 +64,7 @@ def drawGrid():
             pygame.draw.rect(screen,"#3c3c3b",rect, 1)
 
 score_text = FONT.render("1", True, "white")
-score_rect = score_text.get_rect(center=(SW/2.1, SH/20))
+score_rect = score_text.get_rect(center=(SW/2.05, SH/20))
 
 drawGrid()
 
