@@ -11,6 +11,7 @@ FONT = pygame.font.Font("font.ttf",BLOCK_SIZE*2)
 screen = pygame.display.set_mode ((800,800))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
+score = 0
 
 class Snake:
     def __init__(self):
@@ -22,7 +23,7 @@ class Snake:
         self.dead = False 
 
     def update(self):
-        global apple
+        global apple, score
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -37,6 +38,7 @@ class Snake:
             self.xdir = 1
             self.ydir = 0
             self.dead = False
+            score = 0
             apple = Apple()
 
         self.body.append(self.head)
@@ -61,8 +63,8 @@ def drawGrid():
             rect = pygame.Rect(x,y,BLOCK_SIZE,BLOCK_SIZE)
             pygame.draw.rect(screen,"#3c3c3b",rect, 1)
 
-score = FONT.render("1", True, "white")
-score_rect = score.get_rect(center=(SW/2, SH/20))
+score_text = FONT.render("1", True, "white")
+score_rect = score_text.get_rect(center=(SW/2, SH/20))
 
 drawGrid()
 
@@ -96,18 +98,19 @@ while True:
     
     apple.update()
 
-    score = FONT.render(f"{len(snake.body) + 1}", True, "white")
+    score_text = FONT.render(f"{score}", True, "white")
 
     pygame.draw.rect(screen,"green", snake.head)
 
     for square in snake.body:
         pygame.draw.rect(screen, "green" , square)
 
-    screen.blit(score, score_rect)
+    screen.blit(score_text, score_rect)
 
     if snake.head.x == apple.x and snake.head.y == apple.y:
         snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
         apple = Apple()
+        score += 1
 
     pygame.display.update()
     clock.tick(8)
