@@ -54,13 +54,20 @@ class Snake:
 
 class Apple:
     def __init__(self):
+        self.spawn_new_apple()
+
+    def spawn_new_apple(self):
         self.x = int(random.randint(0, SW)/BLOCK_SIZE) *BLOCK_SIZE
         self.y = int(random.randint(0, SH)/BLOCK_SIZE) *BLOCK_SIZE
         self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
 
     def update(self):
+        for obs in obstacle:
+            if self.x == obs.x and self.y == obs.y:
+                self.spawn_new_apple()
         pygame.draw.rect(screen, "red", self.rect)
 
+        
 class Obstacle:
     def __init__(self):
         self.x = int(random.randint(0, SW)/BLOCK_SIZE) *BLOCK_SIZE
