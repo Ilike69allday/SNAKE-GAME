@@ -13,15 +13,15 @@ pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0  
 
-class Snake:
-    def __init__(self, x, y, controls):
-        self.x, self.y = x, y
-        self.xdir, self.ydir = 1, 0
+class Snake1:
+    def __init__(self, controls):
+        self.x ,self.y = BLOCK_SIZE, BLOCK_SIZE
+        self.xdir = 1
+        self.ydir = 0
         self.controls = controls
-        self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
-        self.body = [pygame.Rect(self.x - BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
-        self.dead = False
-        
+        self.head = pygame.Rect(self.x,self.y, BLOCK_SIZE,BLOCK_SIZE)
+        self.body = [pygame.Rect(self.x-BLOCK_SIZE,self.y, BLOCK_SIZE,BLOCK_SIZE)]
+        self.dead = False 
 
     def update(self, other_snake):
         global apple1, apple2, score
@@ -37,16 +37,62 @@ class Snake:
         if self.dead:
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
-            self.body = [pygame.Rect(self.x - BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
-            self.xdir, self.ydir = 1, 0
+            self.body = [pygame.Rect(self.x-BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
+            self.xdir = 1
+            self.ydir = 0
             self.dead = False
             score = 0
             apple1 = Apple1()
             apple2 = Apple2()
 
         self.body.append(self.head)
-        for i in range(len(self.body) - 1):
-            self.body[i].x, self.body[i].y = self.body[i + 1].x, self.body[i + 1].y
+        for i in range(len(self.body)-1):
+            self.body[i].x, self.body[i].y = self.body[i+1].x , self.body[i+1].y
+        self.head.x += self.xdir * BLOCK_SIZE
+        self.head.y += self.ydir * BLOCK_SIZE
+        self.body.remove(self.head)
+
+        # Check collision with the other snake
+        for square in other_snake.body:
+            if self.head.x == square.x and self.head.y == square.y:
+                self.dead = True
+                other_snake.dead = True
+
+class Snake2:
+    def __init__(self, controls):
+        self.x ,self.y = SW - BLOCK_SIZE, SH - BLOCK_SIZE
+        self.xdir = -1
+        self.ydir = 0
+        self.controls = controls
+        self.head = pygame.Rect(self.x,self.y, BLOCK_SIZE,BLOCK_SIZE)
+        self.body = [pygame.Rect(self.x-BLOCK_SIZE,self.y, BLOCK_SIZE,BLOCK_SIZE)]
+        self.dead = False 
+
+    def update(self, other_snake):
+        global apple1, apple2, score
+
+        for square in self.body:
+            if self.head.x == square.x and self.head.y == square.y:
+                self.dead = True
+                other_snake.dead = True
+            if self.head.x not in range(0, SW) or self.head.y not in range(0, SH):
+                self.dead = True
+                other_snake.dead = True
+
+        if self.dead:
+            self.x, self.y = SW - BLOCK_SIZE, SH - BLOCK_SIZE
+            self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
+            self.body = [pygame.Rect(self.x-BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
+            self.xdir = -1
+            self.ydir = 0
+            self.dead = False
+            score = 0
+            apple1 = Apple1()
+            apple2 = Apple2()
+
+        self.body.append(self.head)
+        for i in range(len(self.body)-1):
+            self.body[i].x, self.body[i].y = self.body[i+1].x , self.body[i+1].y
         self.head.x += self.xdir * BLOCK_SIZE
         self.head.y += self.ydir * BLOCK_SIZE
         self.body.remove(self.head)
@@ -86,8 +132,8 @@ score_rect = score_text.get_rect(center=(SW/2.05, SH/20))
 
 drawGrid()
 
-snake1 = Snake(BLOCK_SIZE, BLOCK_SIZE, 0)
-snake2 = Snake(SW - BLOCK_SIZE, SH - BLOCK_SIZE, 1)
+snake1 = Snake1(0)
+snake2 = Snake2(1)
 
 apple1 = Apple1()
 apple2 = Apple2()

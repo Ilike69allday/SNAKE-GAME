@@ -12,8 +12,8 @@ screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0
-snake_slowed_down = False
-snake_slow_down_start_time = 0
+snake_speed_up = False
+snake_speed_up_start_time = 0
 eat_power_time = 0
 spawn_time = 0
 
@@ -27,7 +27,7 @@ class Snake:
         self.dead = False
 
     def update(self):
-        global apple, score, powerup, clock, snake_slowed_down, snake_slow_down_start_time
+        global apple, score, powerup, clock, snake_speed_up, snake_speed_up_start_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -45,7 +45,7 @@ class Snake:
             score = 0
             apple = Apple()
             clock.tick(8)
-            snake_slowed_down = False
+            snake_speed_up = False
 
         self.body.append(self.head)
         for i in range(len(self.body) - 1):
@@ -119,7 +119,7 @@ while True:
                 snake.ydir = 0
         if event.type == powerup_timer:
             powerup = Powerup()
-            snake.snake_slowed_down = False
+            snake.snake_speed_up = False
             spawn_time = pygame.time.get_ticks()
 
 
@@ -158,8 +158,8 @@ while True:
     # Check for collision with power-up
     if powerup and snake.head.colliderect(powerup.rect):
         powerup = None
-        snake.snake_slowed_down = True
-        snake_update_frequency = 4
+        snake.snake_speed_up = True
+        snake_update_frequency = 30
         eat_power_time = pygame.time.get_ticks()
         score += 3
 
