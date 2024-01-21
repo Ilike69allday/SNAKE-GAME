@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 big_font = pygame.font.Font(None, BIG_FONT_SIZE)
 font = pygame.font.Font(None, FONT_SIZE)
 
-options = ["Option 1", "Option 2", "Option 3", "Option 4", "Quit"]
+options = ["Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "Quit"]
 selected_option = 0
 
 def draw_menu():
