@@ -84,7 +84,7 @@ def drawGrid():
             pygame.draw.rect(screen,"#3c3c3b",rect, 1)
 
 score_text = FONT.render("1", True, "white")
-score_rect = score_text.get_rect(center=(SW/2.1, SH/20))
+score_rect = score_text.get_rect(center=(SW/2.05, SH/20))
 
 drawGrid()
 
