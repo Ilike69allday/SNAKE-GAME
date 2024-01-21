@@ -27,7 +27,7 @@ class Snake:
         self.dead = False
 
     def update(self):
-        global apple, score, powerup, clock, snake_speed_up, snake_speed_up_start_time
+        global apple, score, powerup, clock, snake_speed_up, snake_speed_up_start_time, eat_power_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -46,6 +46,7 @@ class Snake:
             apple = Apple()
             clock.tick(8)
             snake_speed_up = False
+            eat_power_time = 0
 
         self.body.append(self.head)
         for i in range(len(self.body) - 1):
