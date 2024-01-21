@@ -97,8 +97,6 @@ pygame.time.set_timer(powerup_timer, powerup_spawn_time)
 
 powerup = None  # Initialize power-up object outside the loop
 
-snake_speed = 1
-
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -106,16 +104,16 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                snake.ydir = snake_speed
+                snake.ydir = 1
                 snake.xdir = 0
             elif event.key == pygame.K_UP:
-                snake.ydir = -snake_speed
+                snake.ydir = -1
                 snake.xdir = 0
             elif event.key == pygame.K_RIGHT:
-                snake.xdir = snake_speed
+                snake.xdir = 1
                 snake.ydir = 0
             elif event.key == pygame.K_LEFT:
-                snake.xdir = -snake_speed
+                snake.xdir = -1
                 snake.ydir = 0
         if event.type == powerup_timer:
             powerup = Powerup()

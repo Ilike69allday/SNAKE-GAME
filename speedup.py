@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 score = 0
 snake_speed_up = False
 snake_speed_up_start_time = 0
-eat_power_time = 0
+eatpower_time = 0
 spawn_time = 0
 
 class Snake:
@@ -25,9 +25,10 @@ class Snake:
         self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
         self.body = [pygame.Rect(self.x - BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
         self.dead = False
+        self.snake_speed_up = False
 
     def update(self):
-        global apple, score, powerup, clock, snake_speed_up, snake_speed_up_start_time, eat_power_time
+        global apple, score, powerup, clock, snake_speed_up, snake_speed_up_start_time, eatpower_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -46,7 +47,7 @@ class Snake:
             apple = Apple()
             clock.tick(8)
             snake_speed_up = False
-            eat_power_time = 0
+            eatpower_time = 0
 
         self.body.append(self.head)
         for i in range(len(self.body) - 1):
@@ -74,7 +75,7 @@ class Powerup:
         self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
 
     def draw(self):
-        pygame.draw.rect(screen, "orange", self.rect)
+        pygame.draw.rect(screen, "yellow", self.rect)
 
 def drawGrid():
     for x in range(0, SW, BLOCK_SIZE):
@@ -97,7 +98,6 @@ pygame.time.set_timer(powerup_timer, powerup_spawn_time)
 
 powerup = None  # Initialize power-up object outside the loop
 
-snake_speed = 1
 snake_update_frequency = 8
 
 while True:
@@ -107,16 +107,16 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                snake.ydir = snake_speed
+                snake.ydir = 1
                 snake.xdir = 0
             elif event.key == pygame.K_UP:
-                snake.ydir = -snake_speed
+                snake.ydir = -1
                 snake.xdir = 0
             elif event.key == pygame.K_RIGHT:
-                snake.xdir = snake_speed
+                snake.xdir = 1
                 snake.ydir = 0
             elif event.key == pygame.K_LEFT:
-                snake.xdir = -snake_speed
+                snake.xdir = -1
                 snake.ydir = 0
         if event.type == powerup_timer:
             powerup = Powerup()
@@ -149,8 +149,8 @@ while True:
         apple = Apple()
         score += 1
 
-    if pygame.time.get_ticks() - eat_power_time > 10000:
-        snake.snake_slowed_down = False
+    if pygame.time.get_ticks() - eatpower_time > 10000:
+        snake.snake_speed_up = False
         snake_update_frequency = 8
     
     if pygame.time.get_ticks() - spawn_time >10000:
@@ -161,7 +161,7 @@ while True:
         powerup = None
         snake.snake_speed_up = True
         snake_update_frequency = 30
-        eat_power_time = pygame.time.get_ticks()
+        eatpower_time = pygame.time.get_ticks()
         score += 3
 
     pygame.display.update()
