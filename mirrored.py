@@ -15,7 +15,7 @@ score = 0
 
 class Snake1:
     def __init__(self):
-        self.x ,self.y = SW//2, SH//2 - BLOCK_SIZE
+        self.x ,self.y = 0, SH//2 - BLOCK_SIZE
         self.xdir = 1
         self.ydir = 0
         self.head = pygame.Rect(self.x,self.y, BLOCK_SIZE,BLOCK_SIZE)
@@ -34,7 +34,7 @@ class Snake1:
                 other_snake.dead = True
 
         if self.dead:
-            self.x, self.y = SW//2, SH//2 - BLOCK_SIZE
+            self.x, self.y = BLOCK_SIZE, SH//2 - BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
             self.body = [pygame.Rect(self.x-BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
             self.xdir = 1
@@ -58,7 +58,7 @@ class Snake1:
 
 class Snake2:
     def __init__(self):
-        self.x ,self.y = SW//2 , SH//2
+        self.x ,self.y = SW-BLOCK_SIZE, SH//2
         self.xdir = -1
         self.ydir = 0
         self.head = pygame.Rect(self.x,self.y, BLOCK_SIZE,BLOCK_SIZE)
@@ -77,7 +77,7 @@ class Snake2:
                 other_snake.dead = True
 
         if self.dead:
-            self.x, self.y = SW//2 , SH//2
+            self.x, self.y = SW-BLOCK_SIZE, SH//2
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
             self.body = [pygame.Rect(self.x-BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
             self.xdir = -1
