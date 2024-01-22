@@ -15,6 +15,7 @@ score = 0
 snake_speed_up = False
 snake_slow_down = False
 snake_score_double = False
+snake_invisible = False
 snake_power_up_start_time = 0
 eat_power_time = 0
 spawn_time = 0
@@ -30,9 +31,10 @@ class Snake:
         self.snake_speed_up = False
         self.snake_slow_down = False
         self.snake_score_double = False
+        self.snake_invisible = False
 
     def update(self):
-        global apple, score, powerup, clock, snake_speed_up, snake_slow_down, snake_score_double, snake_power_up_start_time, eat_power_time
+        global apple, score, powerup, clock, snake_speed_up, snake_slow_down, snake_score_double, snake_invisible, snake_power_up_start_time, eat_power_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -53,6 +55,7 @@ class Snake:
             snake_speed_up = False
             snake_slow_down = False
             snake_score_double = False
+            snake_invisible = False
             eat_power_time = 0
 
         self.body.append(self.head)
@@ -125,7 +128,7 @@ while True:
                 snake.xdir = -1
                 snake.ydir = 0
         if event.type == powerup_timer:
-            powerup_types = ["speed_up", "slow_down", "score_double"]
+            powerup_types = ["speed_up", "slow_down", "score_double", "invisibility"]
             selected_powerup = random.choice(powerup_types)
 
             # Spawn the selected power-up
@@ -135,6 +138,8 @@ while True:
             snake.snake_speed_up = selected_powerup == "speed_up"
             snake.snake_slow_down = selected_powerup == "slow_down"
             snake.snake_score_double = selected_powerup == "score_double"
+            snake.snake_invisible = selected_powerup == "invisibility"
+            snake.snake_invisible = False
             spawn_time = pygame.time.get_ticks()
 
     snake.update()
@@ -148,11 +153,12 @@ while True:
         powerup.draw()
 
     score_text = FONT.render(f"{score}", True, "white")
-
-    pygame.draw.rect(screen, "green", snake.head)
+    if not snake.snake_invisible:
+        pygame.draw.rect(screen, "green", snake.head)
 
     for square in snake.body:
-        pygame.draw.rect(screen, "green", square)
+        if not snake.snake_invisible:
+            pygame.draw.rect(screen, "green", square)
 
     screen.blit(score_text, score_rect)
 
@@ -170,6 +176,7 @@ while True:
         snake.snake_slow_down = False
         snake.snake_speed_up = False
         snake.snake_score_double = False
+        snake.snake_invisible = False
         snake_update_frequency = 8
     
     if pygame.time.get_ticks() - spawn_time > 10000:
@@ -186,6 +193,8 @@ while True:
             snake_update_frequency = 4
         elif selected_powerup == "score_double":
             snake.snake_score_double = True
+        elif selected_powerup == "invisibility":
+            snake.snake_invisible = True
         eat_power_time = pygame.time.get_ticks()
         score += 3
 

@@ -74,7 +74,7 @@ class Powerup:
         self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
 
     def draw(self):
-        pygame.draw.rect(screen, "orange", self.rect)
+        pygame.draw.rect(screen, "yellow", self.rect)
 
 def drawGrid():
     for x in range(0, SW, BLOCK_SIZE):

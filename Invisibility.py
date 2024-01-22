@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import time
 
 pygame.init()
 
@@ -13,6 +12,10 @@ screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0
+snake_invisible = False
+snake_invisible_start_time = 0
+eat_power_time = 0
+spawn_time = 0
 
 class Snake:
     def __init__(self):
@@ -22,12 +25,10 @@ class Snake:
         self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
         self.body = [pygame.Rect(self.x - BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
         self.dead = False 
-        self.invisible = False
-        self.invisible_duration = 5  # seconds
-        self.invisible_counter = 0
+        self.snake_invisible = False
 
-    def update(self, powerup_active):
-        global apple, score
+    def update(self):
+        global apple, score, powerup, clock, snake_invisible, snake_invisible_start_time, eat_power_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
@@ -42,10 +43,10 @@ class Snake:
             self.xdir = 1
             self.ydir = 0
             self.dead = False
-            self.invisible = False
-            self.invisible_counter = 0
             score = 0
             apple = Apple()
+            snake_invisible = False
+            eat_power_time = 0
 
         self.body.append(self.head)
         for i in range(len(self.body) - 1):
@@ -53,22 +54,6 @@ class Snake:
         self.head.x += self.xdir * BLOCK_SIZE
         self.head.y += self.ydir * BLOCK_SIZE
         self.body.remove(self.head)
-
-        self.update_invisibility()
-
-        if powerup_active and self.head.colliderect(powerup.rect):
-            self.activate_powerup()
-            powerup.reset()
-
-    def update_invisibility(self):
-        if self.invisible:
-            self.invisible_counter -= 1
-            if self.invisible_counter <= 0:
-                self.invisible = False
-
-    def activate_powerup(self):
-        self.invisible = True
-        self.invisible_counter = self.invisible_duration * 8  # Adjust duration based on your tick rate
 
 class Apple:
     def __init__(self):
@@ -81,32 +66,15 @@ class Apple:
 
 class Powerup:
     def __init__(self):
-        self.active = False
-        self.duration = 10  # seconds
-        self.counter = 0
-        self.rect = None
+        self.spawn_new_powerup()
 
-    def spawn(self):
-        self.active = True
-        self.counter = self.duration * 8  # Adjust duration based on your tick rate
-        self.rect = pygame.Rect(
-            random.randint(0, SW // BLOCK_SIZE - 1) * BLOCK_SIZE,
-            random.randint(0, SH // BLOCK_SIZE - 1) * BLOCK_SIZE,
-            BLOCK_SIZE,
-            BLOCK_SIZE)
+    def spawn_new_powerup(self):
+        self.x = int(random.randint(0, SW - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
+        self.y = int(random.randint(0, SH - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
+        self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
 
-    def reset(self):
-        self.active = False
-        self.counter = 0
-        self.rect = None
-
-    def update(self):
-        if self.active:
-            self.counter -= 1
-            if self.counter <= 0:
-                self.reset()
-
-powerup = Powerup()
+    def draw(self):
+        pygame.draw.rect(screen, "yellow", self.rect)
 
 def drawGrid():
     for x in range(0, SW, BLOCK_SIZE):
@@ -123,7 +91,11 @@ snake = Snake()
 
 apple = Apple()
 
-powerup_spawn_time = time.time()
+powerup_timer = pygame.USEREVENT + 1
+powerup_spawn_time = 30000  # spawn one in every 30 seconds
+pygame.time.set_timer(powerup_timer, powerup_spawn_time)
+
+powerup = None  # Initialize power-up object outside the loop
 
 while True:
     for event in pygame.event.get():
@@ -143,31 +115,28 @@ while True:
             elif event.key == pygame.K_LEFT:
                 snake.xdir = -1
                 snake.ydir = 0
+        if event.type == powerup_timer:
+            powerup = Powerup()
+            snake.snake_invisible = False
+            spawn_time = pygame.time.get_ticks()
 
-    current_time = time.time()
-
-    if current_time - powerup_spawn_time >= 30 and not powerup.active:
-        powerup.spawn()
-        powerup_spawn_time = current_time
-
-    snake.update(powerup.active)
+    snake.update()
 
     screen.fill("black")
     drawGrid()
     
     apple.update()
-    powerup.update()
 
-    if powerup.active:
-        pygame.draw.rect(screen, "yellow", powerup.rect)
+    if powerup:
+        powerup.draw()
 
     score_text = FONT.render(f"{score}", True, "white")
 
-    if not snake.invisible:
+    if not snake.snake_invisible:
         pygame.draw.rect(screen, "green", snake.head)
 
     for square in snake.body:
-        if not snake.invisible:
+        if not snake.snake_invisible:
             pygame.draw.rect(screen, "green", square)
 
     screen.blit(score_text, score_rect)
@@ -176,6 +145,19 @@ while True:
         snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
         apple = Apple()
         score += 1
+
+    if pygame.time.get_ticks() - eat_power_time > 10000:
+        snake.snake_invisible = False
+    
+    if pygame.time.get_ticks() - spawn_time >10000:
+        powerup = None
+
+    # Check for collision with power-up
+    if powerup and snake.head.colliderect(powerup.rect):
+        powerup = None
+        snake.snake_invisible = True
+        eat_power_time = pygame.time.get_ticks()
+        score += 3
 
     pygame.display.update()
     clock.tick(8)
