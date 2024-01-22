@@ -14,6 +14,14 @@ clock = pygame.time.Clock()
 score = 0
 high_score=0
 
+try:
+    with open('high_score.txt', 'r') as file:
+        content = file.read().strip()
+        if content:
+            high_score = int(content)
+except (FileNotFoundError, ValueError):
+    pass
+
 class Snake:
     def __init__(self):
         self.x ,self.y = BLOCK_SIZE, BLOCK_SIZE
@@ -117,6 +125,9 @@ while True:
         snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
         apple = Apple()
         score += 1
+
+    with open('high_score.txt', 'w') as file:
+        file.write(str(high_score))
 
     pygame.display.update()
     clock.tick(8)
