@@ -12,6 +12,7 @@ screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0
+high_score=0
 snake_speed_up = False
 snake_slow_down = False
 snake_score_double = False
@@ -19,6 +20,14 @@ snake_invisible = False
 snake_power_up_start_time = 0
 eat_power_time = 0
 spawn_time = 0
+
+try:
+    with open('hs_mystery.txt', 'r') as file:
+        content = file.read().strip()
+        if content:
+            high_score = int(content)
+except (FileNotFoundError, ValueError):
+    pass
 
 class Snake:
     def __init__(self):
@@ -34,13 +43,16 @@ class Snake:
         self.snake_invisible = False
 
     def update(self):
-        global apple, score, powerup, clock, snake_speed_up, snake_slow_down, snake_score_double, snake_invisible, snake_power_up_start_time, eat_power_time
+        global high_score, apple, score, powerup, clock, snake_speed_up, snake_slow_down, snake_score_double, snake_invisible, snake_power_up_start_time, eat_power_time
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
                 self.dead = True
             if self.head.x not in range(0, SW) or self.head.y not in range(0, SH):
                 self.dead = True
+        
+        if score > high_score:
+            high_score = score
 
         if self.dead:
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
@@ -153,6 +165,8 @@ while True:
         powerup.draw()
 
     score_text = FONT.render(f"{score}", True, "white")
+    high_score_text = FONT.render(f"High Score: {high_score}", True, "white")
+
     if not snake.snake_invisible:
         pygame.draw.rect(screen, "green", snake.head)
 
@@ -161,6 +175,8 @@ while True:
             pygame.draw.rect(screen, "green", square)
 
     screen.blit(score_text, score_rect)
+    screen.blit(high_score_text, (10, 10))
+
 
     if snake.head.x == apple.x and snake.head.y == apple.y:
         if snake.snake_score_double == True:
@@ -197,6 +213,9 @@ while True:
             snake.snake_invisible = True
         eat_power_time = pygame.time.get_ticks()
         score += 3
+
+    with open('hs_mystery.txt', 'w') as file:
+        file.write(str(high_score))
 
     pygame.display.update()
     clock.tick(snake_update_frequency)
