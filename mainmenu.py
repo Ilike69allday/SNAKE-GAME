@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 big_font = pygame.font.Font(None, BIG_FONT_SIZE)
 font = pygame.font.Font(None, FONT_SIZE)
 
-options = ["Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "Quit"]
+options = ["Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "High Score", "Quit"]
 selected_option = 0
 
 def draw_menu():
@@ -65,6 +65,9 @@ while True:
                     print("Selected: Dual Mode")
                     import dualmod
                 elif selected_option == 5:
+                    print("Selected: High Score")
+                    
+                elif selected_option == 6:
                     pygame.quit()
                     sys.exit()
 

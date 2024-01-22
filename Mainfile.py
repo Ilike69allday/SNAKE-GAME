@@ -12,6 +12,7 @@ screen = pygame.display.set_mode ((SW,SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
 score = 0
+high_score=0
 
 class Snake:
     def __init__(self):
@@ -23,13 +24,16 @@ class Snake:
         self.dead = False 
 
     def update(self):
-        global apple, score
+        global apple, score, high_score
 
         for square in self.body:
             if self.head.x == square.x and self.head.y == square.y:
                 self.dead = True
             if self.head.x not in range(0, SW) or self.head.y not in range(0, SH):
                 self.dead = True
+
+        if score > high_score:
+            high_score = score
 
         if self.dead:
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
@@ -99,6 +103,7 @@ while True:
     apple.update()
 
     score_text = FONT.render(f"{score}", True, "white")
+    high_score_text = FONT.render(f"High Score: {high_score}", True, "white")    
 
     pygame.draw.rect(screen,"green", snake.head)
 
@@ -106,6 +111,7 @@ while True:
         pygame.draw.rect(screen, "green" , square)
 
     screen.blit(score_text, score_rect)
+    screen.blit(high_score_text, (10, 10))
 
     if snake.head.x == apple.x and snake.head.y == apple.y:
         snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
