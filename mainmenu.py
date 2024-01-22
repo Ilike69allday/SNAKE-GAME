@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 big_font = pygame.font.Font(None, BIG_FONT_SIZE)
 font = pygame.font.Font(None, FONT_SIZE)
 
-options = ["Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "High Score", "Quit"]
+options = ["Normal Mode", "Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "High Score", "Quit"]
 selected_option = 0
 
 def draw_menu():
@@ -50,24 +50,26 @@ while True:
                 selected_option = (selected_option + 1) % len(options)
             elif event.key == pygame.K_RETURN:
                 if selected_option == 0:
+                    print("Selected: Normal Mode")
+                    import mainfile
+                elif selected_option == 1:
                     print("Selected: Mystery Block")
                     import mysteryblockmode
-                elif selected_option == 1:
+                elif selected_option == 2:
                     print("Selected: Teleportation")
                     import teleportationmod
-                elif selected_option == 2:
+                elif selected_option == 3:
                     print("Selected: Obstacles")
                     import obstaclemod
-                elif selected_option == 3:
+                elif selected_option == 4:
                     print("Selected: Mirrored")
                     import mirrored
-                elif selected_option == 4:
+                elif selected_option == 5:
                     print("Selected: Dual Mode")
                     import dualmod
-                elif selected_option == 5:
-                    print("Selected: High Score")
-                    
                 elif selected_option == 6:
+                    print("Selected: High Score")
+                elif selected_option == 7:
                     pygame.quit()
                     sys.exit()
 
