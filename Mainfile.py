@@ -15,7 +15,7 @@ score = 0
 high_score=0
 
 try:
-    with open('high_score.txt', 'r') as file:
+    with open('hs_normal.txt', 'r') as file:
         content = file.read().strip()
         if content:
             high_score = int(content)
@@ -126,7 +126,7 @@ while True:
         apple = Apple()
         score += 1
 
-    with open('high_score.txt', 'w') as file:
+    with open('hs_normal.txt', 'w') as file:
         file.write(str(high_score))
 
     pygame.display.update()
