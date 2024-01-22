@@ -49,11 +49,24 @@ while True:
             elif event.key == pygame.K_DOWN:
                 selected_option = (selected_option + 1) % len(options)
             elif event.key == pygame.K_RETURN:
-                if selected_option == len(options) - 1:
+                if selected_option == 0:
+                    print("Selected: Mystery Block")
+                    import mysteryblockmode
+                elif selected_option == 1:
+                    print("Selected: Teleportation")
+                    import teleportationmod
+                elif selected_option == 2:
+                    print("Selected: Obstacles")
+                    import obstaclemod
+                elif selected_option == 3:
+                    print("Selected: Mirrored")
+                    import mirrored
+                elif selected_option == 4:
+                    print("Selected: Dual Mode")
+                    import dualmod
+                elif selected_option == 5:
                     pygame.quit()
                     sys.exit()
-                else:
-                    print(f"Selected: {options[selected_option]}")
 
     draw_menu()
     pygame.display.update()
