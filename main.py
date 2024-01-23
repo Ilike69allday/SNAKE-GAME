@@ -1,5 +1,18 @@
+# *********************************************************
+# Program: main.py
+# Course: PSP0101 PROBLEM SOLVING AND PROGRAM DESIGN
+# Class: TL9L
+# Year: 2023/24 Trimester 1
+# Names: CHEW XIN NING | JONATHAN KHOO WEI XIANG | MEOR HAZIMI BIN MEOR MOHAMMAD FARED
+# IDs: 1221109287 | 1221109226 | 1221109249
+# Emails: 1221109287@student.mmu.edu.my | 1221109226@student.mmu.edu.my | 1221109249@student.mmu.edu.my
+# Phones: 011-5925 3822 | 018-227 3888 | 019-752 1755
+# *********************************************************
+
 import pygame
 import sys
+import importlib
+
 
 pygame.init()
 
@@ -9,19 +22,19 @@ FONT_SIZE = 40
 BIG_FONT_SIZE = 60
 
 screen = pygame.display.set_mode((SW,SH))
-pygame.display.set_caption("Main Menu")
+pygame.display.set_caption("Main Menu - Super Snake!")
 clock = pygame.time.Clock()
 
-big_font = pygame.font.Font(None, BIG_FONT_SIZE)
-font = pygame.font.Font(None, FONT_SIZE)
+big_font = pygame.font.Font("font.ttf", BIG_FONT_SIZE)
+font = pygame.font.Font("font.ttf", FONT_SIZE)
 
-options = ["Normal Mode", "Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual Mode", "High Score", "Quit"]
+options = ["Normal", "Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual", "Quit"]
 selected_option = 0
 
 def draw_menu():
     screen.fill("black")
 
-    title_text = big_font.render("SUPER SNAKE", True, "green" )
+    title_text = big_font.render("SUPER SNAKE!", True, "green" )
     title_rect = title_text.get_rect(center=(SW // 2, SH // 8))
     screen.blit(title_text, title_rect)
 
@@ -50,8 +63,8 @@ while True:
                 selected_option = (selected_option + 1) % len(options)
             elif event.key == pygame.K_RETURN:
                 if selected_option == 0:
-                    print("Selected: Normal Mode")
-                    import mainfile
+                    print("Selected: Normal")
+                    import normalmod
                 elif selected_option == 1:
                     print("Selected: Mystery Block")
                     import mysteryblockmode
@@ -60,16 +73,14 @@ while True:
                     import teleportationmod
                 elif selected_option == 3:
                     print("Selected: Obstacles")
-                    import obstaclemod
+                    import obstaclesmod
                 elif selected_option == 4:
                     print("Selected: Mirrored")
                     import mirrored
                 elif selected_option == 5:
-                    print("Selected: Dual Mode")
+                    print("Selected: Dual")
                     import dualmod
                 elif selected_option == 6:
-                    print("Selected: High Score")
-                elif selected_option == 7:
                     pygame.quit()
                     sys.exit()
 

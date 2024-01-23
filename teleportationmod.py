@@ -9,7 +9,7 @@ BLOCK_SIZE = 25
 FONT = pygame.font.Font("font.ttf",BLOCK_SIZE*2)
 
 screen = pygame.display.set_mode ((SW,SH))
-pygame.display.set_caption("Super Snake!")
+pygame.display.set_caption("Teleportation - Super Snake!")
 clock = pygame.time.Clock()
 score = 0
 high_score=0
@@ -44,6 +44,7 @@ class Snake:
             high_score = score
 
         if self.dead:
+            pygame.time.delay(2000)
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
             self.body = [pygame.Rect(self.x-BLOCK_SIZE, self.y, BLOCK_SIZE, BLOCK_SIZE)]
@@ -72,8 +73,8 @@ class Snake:
 
 class Apple:
     def __init__(self):
-        self.x = int(random.randint(0, SW)/BLOCK_SIZE) *BLOCK_SIZE
-        self.y = int(random.randint(0, SH)/BLOCK_SIZE) *BLOCK_SIZE
+        self.x = int(random.randint(0, SW - BLOCK_SIZE)/BLOCK_SIZE) *BLOCK_SIZE
+        self.y = int(random.randint(0, SH - BLOCK_SIZE)/BLOCK_SIZE) *BLOCK_SIZE
         self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
 
     def update(self):
