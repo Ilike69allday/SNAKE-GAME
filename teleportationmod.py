@@ -9,7 +9,7 @@ BLOCK_SIZE = 25
 FONT = pygame.font.Font("font.ttf",BLOCK_SIZE*2)
 
 screen = pygame.display.set_mode ((SW,SH))
-pygame.display.set_caption("Teleportation - Super Snake!")
+pygame.display.set_caption("Teleportation - Super Snake!") # Title of the game 
 clock = pygame.time.Clock()
 score = 0
 high_score=0
@@ -61,14 +61,14 @@ class Snake:
         self.head.y += self.ydir * BLOCK_SIZE
         self.body.remove(self.head)
 
-    def teleport(self):
+    def teleport(self): # Teleport the snake to a new position after eating an apple
         global score, apples
-        if len(apples) == 2:
-            apples.remove(self.current_apple)
-            snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
-            self.head.topleft = apples[0].rect.topleft
-            apples = [Apple(), Apple()]
-            score += 1
+        if len(apples) == 2: # Check for 2 apples
+            apples.remove(self.current_apple) # Remove the apple that snake eats
+            snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE)) # add new block at snake head
+            self.head.topleft = apples[0].rect.topleft # Teleport to the remaining apple, (0) refers to the first in the list apples
+            apples = [Apple(), Apple()] # Generates two new apples
+            score += 1 # score increased by 1
 
 
 class Apple:
@@ -93,7 +93,7 @@ drawGrid()
 
 snake = Snake()
 
-apples = [Apple(), Apple()]
+apples = [Apple(), Apple()] # Spawn two apples at a time. 
 
 while True:
     for event in pygame.event.get():
@@ -119,7 +119,7 @@ while True:
     screen.fill("black")
     drawGrid()
     
-    for apple in apples:
+    for apple in apples: # Apple in List Apples
         apple.update()
 
     score_text = FONT.render(f"{score}", True, "white")
@@ -133,10 +133,10 @@ while True:
     screen.blit(score_text, score_rect)
     screen.blit(high_score_text, (10, 10))
 
-    for apple in apples:
-        if snake.head.colliderect(apple.rect):
-            snake.current_apple = apple
-            snake.teleport()
+    for apple in apples: # When snake hit the apple
+        if snake.head.colliderect(apple.rect): # Check if snake collides with apple 
+            snake.current_apple = apple # Snake collides is the current apple
+            snake.teleport() # Calls for teleport
 
     with open('hs_teleportation.txt', 'w') as file:
         file.write(str(high_score))
