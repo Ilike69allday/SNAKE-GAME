@@ -3,7 +3,7 @@ import sys
 import random
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()
@@ -94,7 +94,7 @@ def drawGrid():
             rect = pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
             pygame.draw.rect(screen, "#3c3c3b", rect, 1)
 
-#score display
+#making the score texts and position it
 score_text = FONT.render("1", True, "white")
 score_rect = score_text.get_rect(center=(SW / 2.05, SH / 20))
 
@@ -110,7 +110,7 @@ pygame.time.set_timer(powerup_timer, powerup_spawn_time)
 
 powerup = None  # Initialize powerup object outside the loop
 
-snake_update_frequency = 8  #initial snake update frequency
+snake_speed = 8  #initial snake speed
 
 while True:
     for event in pygame.event.get():
@@ -154,6 +154,7 @@ while True:
     for square in snake.body:
         pygame.draw.rect(screen, "green", square)
 
+    #Display the score
     screen.blit(score_text, score_rect)
 
     #check if the snake eat the apple or not
@@ -162,10 +163,10 @@ while True:
         apple = Apple()
         score += 1
 
-    #after 10 second the snake affected by the powerup, change back the snake's speed to initial update frequency
+    #after 10 second the snake affected by the powerup, change back the snake's speed to its initial speed
     if pygame.time.get_ticks() - eat_power_time > 10000:
         snake.snakeslowdown = False
-        snake_update_frequency = 8
+        snake_speed = 8
     
     #let the powerup only appear on screen for 10 second and it will be removed
     if pygame.time.get_ticks() - spawn_time >10000: 
@@ -175,9 +176,9 @@ while True:
     if powerup and snake.head.colliderect(powerup.rect):
         powerup = None
         snake.snakeslowdown = True
-        snake_update_frequency = 4  #slow down the speed of snake by changing clock.tick from 8 to 4
+        snake_speed = 4  #slow down the speed of snake by changing clock.tick from 8 to 4
         eat_power_time = pygame.time.get_ticks()
         score += 3 
 
     pygame.display.update()
-    clock.tick(snake_update_frequency)
+    clock.tick(snake_speed)

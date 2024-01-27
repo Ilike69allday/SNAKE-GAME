@@ -3,7 +3,7 @@ import sys
 import random
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()
@@ -20,11 +20,11 @@ score = 0
 high_score=0
 
 try:
-    with open('hs_obstacles.txt', 'r') as file:
-        content = file.read().strip()
-        if content:
-            high_score = int(content)
-except (FileNotFoundError, ValueError):
+    with open('hs_obstacles.txt', 'r') as file: # Open file and r is for reading mode
+        content = file.read().strip()   # Read the content and removing the trailing space
+        if content: # Check for content
+            high_score = int(content)   # Convert content into highscore (int)
+except (FileNotFoundError, ValueError): # File cannot be found, if content cannot be convert into int
     pass
 
 class Snake:
@@ -167,8 +167,9 @@ while True:
 
         obstacle.append(Obstacle())  #add a new obstacles everytime the snake eats an apple
 
-    with open('hs_obstacles.txt', 'w') as file:
-        file.write(str(high_score))
+    with open('hs_obstacles.txt', 'w') as file: # Open file in write mode
+        file.write(str(high_score)) # Must be Str due to in write mode. Convert highscore into str and update file
+
 
     pygame.display.update()
     clock.tick(8)

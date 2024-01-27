@@ -13,7 +13,7 @@ import pygame
 import sys
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()
@@ -60,10 +60,10 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            # When KeyUp, For exmepla, selected is 5, when up key the formula will be (5-1)%6, the remainder is 4 == selected option.
+            # When KeyUp, For example, selected is 5, when up key the formula will be (5-1)%6, the remainder is 4 == selected option.
             if event.key == pygame.K_UP:
                 selected_option = (selected_option - 1) % len(options) 
-            # When KeyDown, For exmeple, selected is 2, when down key the formula will be (2+1)%6, the remainder is 3 == selected option.
+            # When KeyDown, For example, selected is 2, when down key the formula will be (2+1)%6, the remainder is 3 == selected option.
             elif event.key == pygame.K_DOWN:
                 selected_option = (selected_option + 1) % len(options)
             elif event.key == pygame.K_RETURN:

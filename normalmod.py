@@ -3,7 +3,7 @@ import sys
 import random
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()
@@ -107,6 +107,9 @@ while True:
             elif event.key == pygame.K_LEFT:
                 snake.xdir = -1
                 snake.ydir = 0
+            elif event.key == pygame.K_RETURN:  # Check if Enter key is pressed
+                print("Selected : Main Menu")
+                import main
 
     snake.update()
 

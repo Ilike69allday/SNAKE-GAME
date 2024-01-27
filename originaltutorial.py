@@ -3,7 +3,7 @@ import sys
 import random
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()

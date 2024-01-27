@@ -15,6 +15,8 @@ FONT = pygame.font.Font((current_directory + "\\font.ttf"), BLOCK_SIZE*2)
 screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Super Snake!")
 clock = pygame.time.Clock()
+
+#initialize the variables
 score = 0
 snake_invisible = False
 snake_invisible_start_time = 0
@@ -40,6 +42,7 @@ class Snake:
             if self.head.x not in range(0, SW) or self.head.y not in range(0, SH):
                 self.dead = True
 
+        #restart the game when the snake is dead and reset the variable
         if self.dead:
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
@@ -52,6 +55,7 @@ class Snake:
             snake_invisible = False
             eat_power_time = 0
 
+        #increase the length of snake's body
         self.body.append(self.head)
         for i in range(len(self.body) - 1):
             self.body[i].x, self.body[i].y = self.body[i + 1].x, self.body[i + 1].y

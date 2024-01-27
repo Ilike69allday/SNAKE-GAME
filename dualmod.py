@@ -3,11 +3,12 @@ import sys
 import random
 import os
 
-current_directory = os.getcwd()
+current_directory = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 print(current_directory)
 
 pygame.init()
 
+#set up the screen size, block size and font
 SW, SH = 750, 750
 BLOCK_SIZE = 25 
 FONT = pygame.font.Font((current_directory + "\\font.ttf"), BLOCK_SIZE*2)
@@ -15,19 +16,22 @@ FONT = pygame.font.Font((current_directory + "\\font.ttf"), BLOCK_SIZE*2)
 screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Dual - Super Snake!")
 clock = pygame.time.Clock()
+
+#initialize the variables
 score = 0  
 high_score = 0
 
 try:
-    with open('hs_dual.txt', 'r') as file:
-        content = file.read().strip()
-        if content:
-            high_score = int(content)
-except (FileNotFoundError, ValueError):
+    with open('hs_dual.txt', 'r') as file:  # Open file and r is for reading mode
+        content = file.read().strip()   # Read the content and removing the trailing space
+        if content: # Check for content
+            high_score = int(content)   # Convert content into highscore (int)
+except (FileNotFoundError, ValueError): # File cannot be found, if content cannot be convert into int
     pass
 
 class Snake1:
     def __init__(self):
+        #initialize the snake's body and position
         self.x ,self.y = BLOCK_SIZE, BLOCK_SIZE
         self.xdir = 1
         self.ydir = 0
@@ -46,9 +50,11 @@ class Snake1:
                 self.dead = True
                 other_snake.dead = True
 
+        #update the high score
         if score > high_score:
             high_score = score
 
+        #restart the game when the snake is dead and reset the variable
         if self.dead:
             self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
@@ -60,6 +66,7 @@ class Snake1:
             apple1 = Apple1()
             apple2 = Apple2()
 
+        #increase the length of snake's body
         self.body.append(self.head)
         for i in range(len(self.body)-1):
             self.body[i].x, self.body[i].y = self.body[i+1].x , self.body[i+1].y
@@ -75,6 +82,7 @@ class Snake1:
 
 class Snake2:
     def __init__(self):
+        #initialize the snake's body and position
         self.x ,self.y = SW - BLOCK_SIZE, SH - BLOCK_SIZE
         self.xdir = -1
         self.ydir = 0
@@ -93,6 +101,7 @@ class Snake2:
                 self.dead = True
                 other_snake.dead = True
 
+        #restart the game when the snake is dead and reset the variable
         if self.dead:
             self.x, self.y = SW - BLOCK_SIZE, SH - BLOCK_SIZE
             self.head = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
@@ -104,6 +113,7 @@ class Snake2:
             apple1 = Apple1()
             apple2 = Apple2()
 
+        #increase the length of snake's body
         self.body.append(self.head)
         for i in range(len(self.body)-1):
             self.body[i].x, self.body[i].y = self.body[i+1].x , self.body[i+1].y
@@ -117,6 +127,7 @@ class Snake2:
                 self.dead = True
                 other_snake.dead = True
 
+#generate an apple at random position
 class Apple1:
     def __init__(self):
         self.x = int(random.randint(0, SW - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
@@ -126,6 +137,7 @@ class Apple1:
     def update(self):
         pygame.draw.rect(screen, "red", self.rect)
 
+#generate an apple at random position
 class Apple2:
     def __init__(self):
         self.x = int(random.randint(0, SW) / BLOCK_SIZE) * BLOCK_SIZE
@@ -135,12 +147,14 @@ class Apple2:
     def update(self):
         pygame.draw.rect(screen, "red", self.rect)
 
+#Draw the grid on the screen
 def drawGrid():
     for x in range(0, SW, BLOCK_SIZE):
         for y in range(0, SH, BLOCK_SIZE):
             rect = pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
             pygame.draw.rect(screen, "#3c3c3b", rect, 1)
 
+#making the score texts and position it
 score_text = FONT.render("1", True, "white")
 score_rect = score_text.get_rect(center=(SW/2.05, SH/20))
 
@@ -202,10 +216,11 @@ while True:
     for square in snake2.body:
         pygame.draw.rect(screen, "blue", square)
 
+    #Display the score
     screen.blit(score_texts, score_rect)
     screen.blit(high_score_text, (10, 10))
 
-    # Check if either snake eats the apple
+    # Check if either snake eats the apples
     if snake1.head.x == apple1.x and snake1.head.y == apple1.y:
         snake1.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
         snake2.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
@@ -230,8 +245,8 @@ while True:
         apple2 = Apple2()
         score += 1
 
-    with open('hs_dual.txt', 'w') as file:
-        file.write(str(high_score))
+    with open('hs_dual.txt', 'w') as file:  # Open file in write mode
+        file.write(str(high_score)) # Must be Str due to in write mode. Convert highscore into str and update file
 
     pygame.display.update()
     clock.tick(8)
