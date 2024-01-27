@@ -1,13 +1,17 @@
 import pygame
 import sys
 import random
+import os
+
+current_directory = os.getcwd()
+print(current_directory)
 
 pygame.init()
 
 #set up the screen size, block size and font
 SW, SH = 750, 750
 BLOCK_SIZE = 25
-FONT = pygame.font.Font("font.ttf", BLOCK_SIZE * 2)
+FONT = pygame.font.Font((current_directory + "\\font.ttf"), BLOCK_SIZE*2)
 
 screen = pygame.display.set_mode((SW, SH))
 pygame.display.set_caption("Super Snake!")

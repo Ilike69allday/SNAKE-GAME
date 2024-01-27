@@ -11,6 +11,10 @@
 
 import pygame
 import sys
+import os
+
+current_directory = os.getcwd()
+print(current_directory)
 
 pygame.init()
 
@@ -23,8 +27,8 @@ pygame.display.set_caption("Main Menu - Super Snake!") # Title
 clock = pygame.time.Clock()
 
 # Fonts different Sizes
-big_font = pygame.font.Font("font.ttf", BIG_FONT_SIZE)
-font = pygame.font.Font("font.ttf", FONT_SIZE)
+big_font = pygame.font.Font((current_directory + "\\font.ttf"), BIG_FONT_SIZE)
+font = pygame.font.Font((current_directory + "\\font.ttf"), FONT_SIZE)
 
 # List for options to choose from
 options = ["Normal", "Mystery Block", "Teleportation", "Obstacles", "Mirrored", "Dual", "Quit"]
