@@ -12,14 +12,14 @@ screen = pygame.display.set_mode ((SW,SH))
 pygame.display.set_caption("Normal - Super Snake!")
 clock = pygame.time.Clock()
 score = 0
-high_score=0
+high_score=0 # Set 0 
 
 try:
-    with open('hs_normal.txt', 'r') as file:
-        content = file.read().strip()
-        if content:
-            high_score = int(content)
-except (FileNotFoundError, ValueError):
+    with open('hs_normal.txt', 'r') as file: # Open file and r is for reading mode
+        content = file.read().strip()  # Read the content and removing the trailing space
+        if content: # Check for content
+            high_score = int(content) # Convert content into highscore (int)
+except (FileNotFoundError, ValueError): # File cannot be found, if content cannot be convert into int
     pass
 
 class Snake:
@@ -40,8 +40,8 @@ class Snake:
             if self.head.x not in range(0, SW) or self.head.y not in range(0, SH):
                 self.dead = True
 
-        if score > high_score:
-            high_score = score
+        if score > high_score: 
+            high_score = score # Replace highscore with score
 
         if self.dead:
             pygame.time.delay(2000)
@@ -112,7 +112,7 @@ while True:
     apple.update()
 
     score_text = FONT.render(f"{score}", True, "white")
-    high_score_text = FONT.render(f"High Score: {high_score}", True, "white")    
+    high_score_text = FONT.render(f"High Score: {high_score}", True, "white") # Render HighScore text
 
     pygame.draw.rect(screen,"green", snake.head)
 
@@ -120,15 +120,15 @@ while True:
         pygame.draw.rect(screen, "green" , square)
 
     screen.blit(score_text, score_rect)
-    screen.blit(high_score_text, (10, 10))
+    screen.blit(high_score_text, (10, 10)) # Draw out positioning at top left
 
     if snake.head.x == apple.x and snake.head.y == apple.y:
         snake.body.append(pygame.Rect(square.x, square.y, BLOCK_SIZE, BLOCK_SIZE))
         apple = Apple()
         score += 1
 
-    with open('hs_normal.txt', 'w') as file:
-        file.write(str(high_score))
+    with open('hs_normal.txt', 'w') as file: # Open file in write mode
+        file.write(str(high_score)) # Must be Str due to in write mode. Convert highscore into str and update file
 
     pygame.display.update()
     clock.tick(8)
