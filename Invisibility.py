@@ -66,15 +66,15 @@ class Apple:
 
 class Powerup:
     def __init__(self):
-        self.spawn_new_powerup()
+        self.spawn_new_powerup() # Initializes power up
 
     def spawn_new_powerup(self):
         self.x = int(random.randint(0, SW - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
         self.y = int(random.randint(0, SH - BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
-        self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE)
+        self.rect = pygame.Rect(self.x, self.y, BLOCK_SIZE, BLOCK_SIZE) # Positioning randomly on the map
 
     def draw(self):
-        pygame.draw.rect(screen, "yellow", self.rect)
+        pygame.draw.rect(screen, "yellow", self.rect) # Draw rect out 
 
 def drawGrid():
     for x in range(0, SW, BLOCK_SIZE):
@@ -91,9 +91,9 @@ snake = Snake()
 
 apple = Apple()
 
-powerup_timer = pygame.USEREVENT + 1
-powerup_spawn_time = 30000  # spawn one in every 30 seconds
-pygame.time.set_timer(powerup_timer, powerup_spawn_time)
+powerup_timer = pygame.USEREVENT + 1 # Create a custom event. By adding 1 will create new event
+powerup_spawn_time = 30000  # which is 30 seconds
+pygame.time.set_timer(powerup_timer, powerup_spawn_time) # Trigger every 30 seconds
 
 powerup = None  # Initialize power-up object outside the loop
 
@@ -115,10 +115,10 @@ while True:
             elif event.key == pygame.K_LEFT:
                 snake.xdir = -1
                 snake.ydir = 0
-        if event.type == powerup_timer:
-            powerup = Powerup()
-            snake.snake_invisible = False
-            spawn_time = pygame.time.get_ticks()
+        if event.type == powerup_timer: # If is == new event 
+            powerup = Powerup() # Reset powerup
+            snake.snake_invisible = False # Invisible skill off
+            spawn_time = pygame.time.get_ticks() # Keep track time when spawned
 
     snake.update()
 
@@ -128,15 +128,15 @@ while True:
     apple.update()
 
     if powerup:
-        powerup.draw()
+        powerup.draw() # If launch powerup, draw out yellow block
 
     score_text = FONT.render(f"{score}", True, "white")
 
-    if not snake.snake_invisible:
+    if not snake.snake_invisible: # If invisiblie is False, will be green colour on snake head
         pygame.draw.rect(screen, "green", snake.head)
 
     for square in snake.body:
-        if not snake.snake_invisible:
+        if not snake.snake_invisible: # If invisible is False also, body will be green and visible
             pygame.draw.rect(screen, "green", square)
 
     screen.blit(score_text, score_rect)
@@ -146,18 +146,17 @@ while True:
         apple = Apple()
         score += 1
 
-    if pygame.time.get_ticks() - eat_power_time > 10000:
+    if pygame.time.get_ticks() - eat_power_time > 10000: # If time minus 0 is bigger than 10 secs, invisible is False
         snake.snake_invisible = False
     
-    if pygame.time.get_ticks() - spawn_time >10000:
+    if pygame.time.get_ticks() - spawn_time > 10000: # If time > 10secs, screen will have no powerup 
         powerup = None
 
-    # Check for collision with power-up
-    if powerup and snake.head.colliderect(powerup.rect):
-        powerup = None
-        snake.snake_invisible = True
-        eat_power_time = pygame.time.get_ticks()
-        score += 3
+    if powerup and snake.head.colliderect(powerup.rect):  # Check for collision with power-up
+        powerup = None # Powerup disappear after snake eat
+        snake.snake_invisible = True # Invisible is True
+        eat_power_time = pygame.time.get_ticks() # Track time for invisible 
+        score += 3 # Score add 3 after snake eats
 
     pygame.display.update()
     clock.tick(8)
