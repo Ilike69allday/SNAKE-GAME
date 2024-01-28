@@ -65,6 +65,7 @@ class Snake:
         self.head.y += self.ydir * BLOCK_SIZE
         self.body.remove(self.head)
 
+#generate a random apple at a random position
 class Apple:
     def __init__(self):
         self.x = int(random.randint(0, SW - BLOCK_SIZE)/BLOCK_SIZE) *BLOCK_SIZE
@@ -74,6 +75,7 @@ class Apple:
     def update(self):
         pygame.draw.rect(screen, "red", self.rect)
 
+#Draw the grid on the screen
 def drawGrid():
     for x in range (0,SW,BLOCK_SIZE):
         for y in range (0,SH,BLOCK_SIZE):
@@ -88,6 +90,7 @@ drawGrid()
 snake = Snake()
 
 apple = Apple()
+
 
 while True:
     for event in pygame.event.get():
@@ -107,9 +110,6 @@ while True:
             elif event.key == pygame.K_LEFT:
                 snake.xdir = -1
                 snake.ydir = 0
-            elif event.key == pygame.K_RETURN:  # Check if Enter key is pressed
-                print("Selected : Main Menu")
-                import main
 
     snake.update()
 
