@@ -24,7 +24,7 @@ BIG_FONT_SIZE = 60
 
 screen = pygame.display.set_mode((SW,SH)) # Screen Display Size same as Others
 pygame.display.set_caption("Main Menu - Super Snake!") # Title
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() # helps to control frame rate
 
 # Fonts different Sizes
 big_font = pygame.font.Font((current_directory + "\\font.ttf"), BIG_FONT_SIZE)
